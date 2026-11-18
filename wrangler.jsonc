@@ -1,0 +1,33 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "botv77",
+  "main": "worker/index.ts",
+  "compatibility_date": "2026-10-12",
+  "observability": { "enabled": true },
+  "assets": {
+    "binding": "ASSETS",
+    "directory": "./dist",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/bot", "/hooks/*", "/setup/*", "/media/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      // Create a D1 database named "notpanel" in Cloudflare, then replace the placeholder
+      // below with its real database ID before deploying.
+      "database_name": "notpanel2",
+      "database_id": "d242ec2e-14f9-4f5a-bfc8-bd9b4ca5a1e2",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // Every minute: command menus and broadcasts; every 3 minutes the provider order status backup check,
+  // every 5 minutes the channel re-check for referrals.
+  // At minute :07 of each hour it also runs cleanup (old webhook events, stale pending payments).
+  "triggers": { "crons": ["* * * * *"] },
+  "vars": {
+    // Optional: comma-separated Telegram user IDs that are always admins. More admins can be claimed or added in the app.
+    "OWNER_IDS": "7062424671",
+    // Local development only (set in .dev.vars). Must stay empty in production.
+    "DEV_FAKE_USER_ID": "7430104292"
+  }
+}
